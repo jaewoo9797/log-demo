@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: logback-demo
+  profiles:
+    active: dev
+
+log:
+  config:
+    path: ./logs
+    filename: logback.log
+    maxHistory: 14
+    totalSizeCap: 1GB

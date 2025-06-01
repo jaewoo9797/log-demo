@@ -13,7 +13,10 @@
   <property name="FILE_LOG_PATTERN"
     value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:-} --- %esb(){APPLICATION_NAME}%esb{APPLICATION_GROUP}[%t] ${LOG_CORRELATION_PATTERN:-}%-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
-  <variable name="LOG_PATH" value="./logs"/>
+  <springProperty name="LOG_PATH" source="log.config.path"/>
+  <springProperty name="LOG_FILE_NAME" source="log.config.filename"/>
+  <springProperty name="LOG_MAX_HISTORY" source="log.config.maxHistory"/>
+  <springProperty name="LOG_TOTAL_SIZE_CAP" source="log.config.totalSizeCap"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <!-- PatternLayout Encoder -->
@@ -23,11 +26,11 @@
   </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOG_PATH}/logback.log</file>
+    <file>${LOG_PATH}/${LOG_FILE_NAME}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
-      <maxHistory>30</maxHistory>
-      <totalSizeCap>1GB</totalSizeCap>
+      <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>${LOG_MAX_HISTORY}</maxHistory>
+      <totalSizeCap>${LOG_TOTAL_SIZE_CAP}</totalSizeCap>
     </rollingPolicy>
 
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -35,8 +38,28 @@
     </encoder>
   </appender>
 
-  <root level="INFO">
-    <appender-ref ref="STDOUT"/>
-    <appender-ref ref="FILE"/>
-  </root>
+  <!-- Local 환경 -->
+  <springProfile name="local">
+    <root level="DEBUG">
+      <appender-ref ref="STDOUT"/>
+      <appender-ref ref="FILE"/>
+    </root>
+  </springProfile>
+
+  <!-- dev 환경 -->
+  <springProfile name="dev">
+    <root level="INFO">
+      <appender-ref ref="STDOUT"/>
+      <appender-ref ref="FILE"/>
+    </root>
+  </springProfile>
+
+  <!-- prod 환경 -->
+  <springProfile name="prod">
+    <root level="INFO">
+      <appender-ref ref="STDOUT"/>
+      <appender-ref ref="FILE"/>
+    </root>
+  </springProfile>
+
 </configuration>
