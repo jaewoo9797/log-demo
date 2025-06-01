@@ -1,0 +1,6 @@
+log:
+  config:
+    path: ./logs/dev
+    filename: logback-dev.log
+    maxHistory: 7
+    totalSizeCap: 500MB

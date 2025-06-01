@@ -1,0 +1,6 @@
+log:
+  config:
+    path: ./logs/local
+    filename: logback-local.log
+    maxHistory: 1
+    totalSizeCap: 1GB

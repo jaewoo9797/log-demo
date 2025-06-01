@@ -1,0 +1,6 @@
+log:
+  config:
+    path: /var/log/myapp/prod
+    filename: logback-prod.log
+    maxHistory: 30
+    totalSizeCap: 5GB
