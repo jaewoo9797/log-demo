@@ -38,27 +38,45 @@
     </encoder>
   </appender>
 
-  <!-- Local 환경 -->
+  <!-- 로깅 비동기 처리 설정 -->
+  <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STDOUT"/>
+    <queueSize>512</queueSize> <!-- 기본: 256 -->
+    <discardingThreshold>0</discardingThreshold> <!-- 로그가 많아도 버리지 않음 -->
+    <includeCallerData>false</includeCallerData>
+    <neverBlock>false</neverBlock>
+  </appender>
+
+  <!-- Async File Appender -->
+  <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="FILE"/>
+    <queueSize>1024</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+    <includeCallerData>false</includeCallerData>
+    <neverBlock>false</neverBlock>
+  </appender>
+
+  <!-- local 환경 -->
   <springProfile name="local">
     <root level="DEBUG">
-      <appender-ref ref="STDOUT"/>
-      <appender-ref ref="FILE"/>
+      <appender-ref ref="ASYNC_STDOUT"/>
+      <appender-ref ref="ASYNC_FILE"/>
     </root>
   </springProfile>
 
   <!-- dev 환경 -->
   <springProfile name="dev">
     <root level="INFO">
-      <appender-ref ref="STDOUT"/>
-      <appender-ref ref="FILE"/>
+      <appender-ref ref="ASYNC_STDOUT"/>
+      <appender-ref ref="ASYNC_FILE"/>
     </root>
   </springProfile>
 
   <!-- prod 환경 -->
   <springProfile name="prod">
     <root level="INFO">
-      <appender-ref ref="STDOUT"/>
-      <appender-ref ref="FILE"/>
+      <appender-ref ref="ASYNC_STDOUT"/>
+      <appender-ref ref="ASYNC_FILE"/>
     </root>
   </springProfile>
 
